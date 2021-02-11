@@ -1,11 +1,11 @@
 #!/bin/bash
 
-ver54=94
+ver54=97
 ver57=19
 ver58=18
 ver59=16
-ver510=12
-ver511=rc6
+ver510=15
+ver511=rc7
 
 _tkg_initscript() {
 
