@@ -53,7 +53,7 @@ else
 fi
 pkgname=("${pkgbase}" "${pkgbase}-headers")
 pkgver="${_basekernel}"."${_sub}"
-pkgrel=120
+pkgrel=122
 pkgdesc='Linux-tkg'
 arch=('x86_64') # no i686 in here
 url="http://www.kernel.org/"
@@ -96,7 +96,7 @@ case $_basever in
         	0012-linux-hardened.patch
 	)
 	sha256sums=('bf338980b1670bca287f9994b7441c2361907635879169c64ae78364efc5f491'
-            '1cf123980fafede3734c022d504ce4564ed65b0615ed37da487159de981f0302'
+            '680fbef162b09fbfdfd1ae8c6751722fb8b131cd1879eaf87ed0c41ff873d043'
             'SKIP'
             '55dd5117c1da17c9ec38d7bc995958958bcc8b7ebcfd81de1d4c7650b85537ab'
             '1f4a20d6eaaa0d969af93152a65191492400c6aa838fc1c290b0dd29bb6019d8'
@@ -317,7 +317,7 @@ case $_basever in
         0012-misc-additions.patch
     )
     sha256sums=('dcdf99e43e98330d925016985bfbc7b83c66d367b714b2de0cbbfcbf83d8ca43'
-            'fc126c14140668cc4bdbc8886fb8bc05ae734c5cf1e20b719b40b36d1dae255a'
+            'efef24680b4d0bb00fa63bf5cb733d9e1f00b726562732ab5395323ad35a9236'
             'SKIP'
             '458d1ca195f3fee5501683a4b61ef0ed0cfa7e5219eccab3390fb40c0289898a'
             'eb1da1a028a1c967222b5bdac1db2b2c4d8285bafd714892f6fc821c10416341'
@@ -365,17 +365,18 @@ case $_basever in
         #0005-undead-glitched-ondemand-pds.patch
         #0005-undead-glitched-pds.patch
         #0005-v5.11_undead-pds099o.patch
-        #0005-glitched-pds.patch
+        0005-glitched-pds.patch
         0006-add-acs-overrides_iommu.patch
         0007-v5.11-fsync.patch
         #0008-5.11-bcachefs.patch
-        #0009-glitched-ondemand-bmq.patch
-        #0009-glitched-bmq.patch
-        #0009-prjc_v5.11-r0.patch
+        0009-glitched-ondemand-bmq.patch
+        0009-glitched-bmq.patch
+        0009-prjc_v5.11-r0.patch
         0011-ZFS-fix.patch
         #0012-linux-hardened.patch
+        0012-misc-additions.patch
     )
-    sha256sums=('61b93b9f7251237fa5593eb50d1b5845752c2865ccab28bdb38a18fdafcf2720'
+    sha256sums=('04f07b54f0d40adfab02ee6cbd2a942c96728d87c1ef9e120d0cb9ba3fe067b4'
             'SKIP'
             '146fa46ef9921864fdc34079407b90242d9caa557436fd4ee6a4d424f50c41d0'
             '1e15fc2ef3fa770217ecc63a220e5df2ddbcf3295eb4a021171e7edd4c6cc898'
@@ -384,9 +385,14 @@ case $_basever in
             '35a7cde86fb94939c0f25a62b8c47f3de0dbd3c65f876f460b263181b3e92fc0'
             '1ac97da07e72ec7e2b0923d32daacacfaa632a44c714d6942d9f143fe239e1b5'
             '7058e57fd68367b029adc77f2a82928f1433daaf02c8c279cb2d13556c8804d7'
+            'fca63d15ca4502aebd73e76d7499b243d2c03db71ff5ab0bf5cf268b2e576320'
             '19661ec0d39f9663452b34433214c755179894528bf73a42f6ba52ccf572832a'
             'b302ba6c5bbe8ed19b20207505d513208fae1e678cf4d8e7ac0b154e5fe3f456'
-            '49262ce4a8089fa70275aad742fc914baa28d9c384f710c9a62f64796d13e104')
+            '9fad4a40449e09522899955762c8928ae17f4cdaa16e01239fd12592e9d58177'
+            'a557b342111849a5f920bbe1c129f3ff1fc1eff62c6bd6685e0972fc88e39911'
+            'ad3ff525e9e7cd53e0f9a19350c144398dffa943573b9741f4cdb085b05efffe'
+            '49262ce4a8089fa70275aad742fc914baa28d9c384f710c9a62f64796d13e104'
+            '7fb1104c167edb79ec8fbdcde97940ed0f806aa978bdd14d0c665a1d76d25c24')
 	;;
 esac
 
