@@ -4,7 +4,8 @@
 
 
 Custom Linux kernels with specific CPU schedulers related patchsets selector (CFS is an option for every kernel) with added tweaks for a nice interactivity/performance balance, aiming for the best gaming experience.
-- 5.10rc (Undead PDS, Project C / PDS & BMQ, MuQSS)
+- 5.11.y (Project C / PDS & BMQ, MuQSS)
+- 5.10.y (Undead PDS, Project C / PDS & BMQ, MuQSS)
 - 5.9.y (Undead PDS, Project C / PDS & BMQ, MuQSS)
 - 5.8.y (Undead PDS, Project C / PDS & BMQ)
 - 5.7.y (MuQSS, PDS, Project C / BMQ)
@@ -25,6 +26,40 @@ Comes with a slightly modified Arch config asking for a few core personalization
 If you want to streamline your kernel config for lower footprint and faster compilations : https://wiki.archlinux.org/index.php/Modprobed-db
 You can optionally enable support for it at the beginning of the PKGBUILD file. **Make sure to read everything you need to know about it as there are big caveats making it NOT recommended for most users**.
 
+**Note regarding kernels older than 5.9 on Archlinux:**
+**Since the switch to zstd compressed initramfs by default, you will face an "invalid magic at start of compress" error by default. You can workaround the issue by editing `/etc/mkinitcpio.conf` to uncomment the `COMPRESSION="lz4"` (for example, since that's the best option after zstd) line and regenerating for all kernels with `sudo mkinitpcio -P`.**
+
+
+### Anbox usage
+
+When enabling the anbox support option, the modules are built-in. You don't have to load them. However you'll need to mount binderfs :
+```
+sudo mkdir /dev/binderfs
+sudo mount -t binder binder /dev/binderfs
+```
+
+To make this persistent, you can create `/etc/tmpfiles.d/anbox.conf` with the following content :
+```
+d! /dev/binderfs 0755 root root
+```
+After which you can add the following to your `/etc/fstab` :
+```
+binder                         /dev/binderfs binder   nofail  0      0
+```
+
+Then, if needed, start the anbox service :
+```
+systemctl start anbox-container-manager.service
+```
+
+You can also enable the service for it to be auto-started on boot :
+```
+systemctl enable anbox-container-manager.service
+```
+
+You're set to run Anbox.
+
+
 ## Other stuff included:
 - Graysky's per-CPU-arch native optimizations - https://github.com/graysky2/kernel_gcc_patch
 - memory management and swapping tweaks
@@ -37,6 +72,7 @@ You can optionally enable support for it at the beginning of the PKGBUILD file. 
 - cherry-picked clear linux patches
 - **optional** overrides for missing ACS capabilities
 - **optional** Fsync support (proton)
+- **optional** futex2 support (proton)
 - **optional** Anbox support (binder, ashmem)
 - **optional** ZFS fpu symbols (<5.9)
 
