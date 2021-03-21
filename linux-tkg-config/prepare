@@ -1,12 +1,12 @@
 #!/bin/bash
 
-ver54=105
+ver54=107
 ver57=19
 ver58=18
 ver59=16
-ver510=23
-ver511=6
-ver512=rc2
+ver510=25
+ver511=8
+ver512=rc3
 
 _cpuschedselector() {
   msg2 "Which CPU sched variant do you want to build/install? Select \"1\" if unsure."
@@ -191,6 +191,7 @@ _tkg_initscript() {
     _CPUSCHEDVARARRAY=("upds" "pds" "bmq" "muqss" "MuQSS" "cfs")
   else
     _CPUSCHEDARRAY=("CFS")
+    _CPUSCHEDVARARRAY=("cfs")
   fi
 
   if [ -z "$_cpusched" ] && [ ! -e "${_path}"/cpuschedset ]; then
@@ -1100,18 +1101,19 @@ CONFIG_DEBUG_INFO_BTF_MODULES=y\n
     echo "CONFIG_FUTEX2=y" >> ./.config
   fi
 
-  # ZFS fix
-  if [ "$_basever" = "54" ] || [ "$_basever" = "57" ] || [ "$_basever" = "58" ]; then
-    if [ -z "$_zfsfix" ]; then
-      plain ""
-      plain "Add back missing symbol for AES-NI/AVX support on ZFS"
-      plain "https://github.com/NixOS/nixpkgs/blob/master/pkgs/os-specific/linux/kernel/export_kernel_fpu_functions_5_3.patch"
-      read -rp "`echo $'    > N/y : '`" CONDITION11;
-    fi
-    if [[ "$CONDITION11" =~ [yY] ]] || [ "$_zfsfix" = "true" ]; then
-      msg2 "Patching missing symbol for AES-NI/AVX support on ZFS"
-      tkgpatch="$srcdir/0011-ZFS-fix.patch" && _tkg_patcher
-    fi
+  # winesync support
+  if [ -z "$_winesync" ]; then
+    plain ""
+    plain "Enable support for winesync, an experimental replacement for esync"
+    plain "https://repo.or.cz/linux/zf.git/shortlog/refs/heads/winesync"
+    read -rp "`echo $'    > N/y : '`" CONDITION_winesync;
+  fi
+  if [[ "$CONDITION_winesync" =~ [yY] ]] || [ "$_winesync" = "true" ]; then
+    msg2 "Patching winesync support"
+    tkgpatch="$srcdir/0007-v${_basekernel}-winesync.patch" && _tkg_patcher
+    echo "CONFIG_WINESYNC=m" >> ./.config
+    echo "KERNEL==\"winesync\", MODE=\"0644\"" > ../winesync.rules
+    echo "winesync" > ../winesync.conf
   fi
 
  # Anbox modules
@@ -1125,6 +1127,7 @@ CONFIG_DEBUG_INFO_BTF_MODULES=y\n
     if [[ "$CONDITION12" =~ [yY] ]] || [ "$_anbox" = "true" ]; then
       echo "CONFIG_ASHMEM=y" >> ./.config
       echo "CONFIG_ION=y" >> ./.config
+      echo "ION_CMA_HEAP=y" >> ./.config
       echo "# CONFIG_ION_SYSTEM_HEAP is not set" >> ./.config
       echo "CONFIG_ANDROID=y" >> ./.config
       echo "CONFIG_ANDROID_BINDER_IPC=y" >> ./.config
@@ -1307,6 +1310,7 @@ exit_cleanup() {
     rm -rf "$srcdir"/*.xz
     rm -rf "$srcdir"/*.patch
     rm -rf "$srcdir"/*-profile.cfg
+    rm -rf "$srcdir"/*.rules
     rm -f "$srcdir"/config.x86_64
     rm -f "$srcdir"/customization.cfg
 
